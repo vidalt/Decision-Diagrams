@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Testing &mdash; Optimal Decision Diagrams 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Reference" href="reference.html" />
+    <link rel="prev" title="Experiments" href="experiments.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Optimal Decision Diagrams
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experiments.html">Experiments</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#heuristic">Heuristic</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#automated-tests">Automated tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manual-evaluation-and-validation">Manual evaluation and validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-heuristic-py-script">run_heuristic.py script</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data pipeline</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data/reference.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Optimal Decision Diagrams</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Testing</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/testing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="testing">
+<h1>Testing<a class="headerlink" href="#testing" title="Permalink to this heading"></a></h1>
+<section id="heuristic">
+<h2>Heuristic<a class="headerlink" href="#heuristic" title="Permalink to this heading"></a></h2>
+<p>The heuristic implementation has a set of tests to ensure changes do not introduce bugs. There are two types of tests,
+automated tests for model verification and manual model evaluation and validation.</p>
+<section id="automated-tests">
+<h3>Automated tests<a class="headerlink" href="#automated-tests" title="Permalink to this heading"></a></h3>
+<p>Tests for the heuristic are implemented in <code class="docutils literal notranslate"><span class="pre">tests/test_heuristic.py</span></code>.</p>
+<p>To run this tests, first install <code class="docutils literal notranslate"><span class="pre">pytest</span></code> within the virtual environment created during <a class="reference internal" href="getting-started.html#section-installation"><span class="std std-ref">installation</span></a>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">source</span> env/bin/activate
+<span class="gp">$</span> pip install pytest
+</pre></div>
+</div>
+<p>Then run the tests from the project root:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pytest --seed<span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">seed</span></code> is an integer.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The automated tests runs for <em>all</em> data sets, two topology skeletons and three alpha hyperparameters. For this reason, they can be slow.
+For writing new tests, it is recommended to temporarily setup fewer data sets and configurations in the <code class="docutils literal notranslate"><span class="pre">tests/conftest.py</span></code> file.</p>
+</div>
+</section>
+<section id="manual-evaluation-and-validation">
+<h3>Manual evaluation and validation<a class="headerlink" href="#manual-evaluation-and-validation" title="Permalink to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">run_heuristic.py</span></code> script allows the heuristic to be run for any combination of data set, seed, topology and alpha hyperparameter.
+It reports training accuracy, test accuracy and objective value.</p>
+<p>For model evaluation and validation, we have a <strong>GitHub Action</strong> setup that is triggered whenever the <code class="docutils literal notranslate"><span class="pre">src/heuristic.py</span></code> file is modified.
+It runs the script for <em>all</em> data set and a number of seed, topology and alpha configurations. Results are saved to the <code class="docutils literal notranslate"><span class="pre">output/heuristic</span></code>
+directory.</p>
+<p>These outputs can be evaluated for overall impacts of each commit on accuracy, generalization and objective value.</p>
+</section>
+<section id="run-heuristic-py-script">
+<h3>run_heuristic.py script<a class="headerlink" href="#run-heuristic-py-script" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">run_heuristic</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">t</span> <span class="n">TOPOLOGIES</span> <span class="p">[</span><span class="n">TOPOLOGIES</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span> <span class="n">ALPHAS</span> <span class="p">[</span><span class="n">ALPHAS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">s</span> <span class="n">SEEDS</span> <span class="p">[</span><span class="n">SEEDS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="n">dataset</span><span class="p">]</span>
+</pre></div>
+</div>
+<section id="Positional Arguments">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this heading"></a></h4>
+<dl class="option-list">
+<dt><kbd>dataset</kbd></dt>
+<dd><p>Data set name to run heuristic. Must match the filename (without extension)        of a <em>.arff</em> file in the <code class="docutils literal notranslate"><span class="pre">datasets/raw</span></code> directory. Use <code class="docutils literal notranslate"><span class="pre">all</span></code> or omit to check all datasets.</p>
+</dd>
+</dl>
+</section>
+<section id="Named Arguments">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this heading"></a></h4>
+<dl class="option-list">
+<dt><kbd>-t, --topologies</kbd></dt>
+<dd><p>List of topology skeletons.</p>
+<p>Default: 1-2-4-4-4</p>
+</dd>
+<dt><kbd>-a, --alphas</kbd></dt>
+<dd><p>List of alpha hyperparameters.</p>
+<p>Default: [0.0]</p>
+</dd>
+<dt><kbd>-s, --seeds</kbd></dt>
+<dd><p>List of seeds.</p>
+<p>Default: [1]</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="experiments.html" class="btn btn-neutral float-left" title="Experiments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference.html" class="btn btn-neutral float-right" title="Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Alexandre M. Florio, Pedro Martins, Maximilian Schiffer, Thiago Serra, Thibaut Vidal.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

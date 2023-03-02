@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Introduction &mdash; Optimal Decision Diagrams 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Reference" href="reference.html" />
+    <link rel="prev" title="Reference" href="../reference.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Optimal Decision Diagrams
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing.html">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference.html">Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data pipeline</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-usage">Basic usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Optimal Decision Diagrams</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Introduction</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/data/introduction.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h1>
+<p>For the <a class="reference external" href="https://arxiv.org/abs/2205.14500">Optimal Decision Diagrams for Classification</a> paper we chose
+as <strong>benchmark</strong> the <strong>54 data sets</strong> from the UCI Machine Learning Repository <a class="footnote-reference brackets" href="#id4" id="id1">1</a> used by Bertsimas and Dunn (2017) <a class="footnote-reference brackets" href="#id5" id="id2">2</a> for
+their seminal work on <strong>optimal decision trees</strong>.</p>
+<p>Finding all data sets in a <strong>standard format</strong> proved to be a <strong>challenge</strong>.
+We did find all data sets in the <strong>ARFF format</strong>, though with <strong>differing categorical encodings</strong>, <strong>data cleaning strategies</strong> and other details.</p>
+<p>For this reason, we created a <strong>data pipeline</strong> to preprocess all ARFF files into CSV with a <strong>standard format</strong> of <strong>zero-based indexing</strong>, <strong>one-hot encoding</strong>
+and <strong>no rows with missing values</strong>, following the original benchmark from Bertsimas and Dunn (2017) <a class="footnote-reference brackets" href="#id5" id="id3">2</a>.</p>
+<p>The pipeline expects ARFF files in the <code class="docutils literal notranslate"><span class="pre">datasets/raw</span></code> directory and a set of corresponding transformations in <code class="docutils literal notranslate"><span class="pre">datasets/transformations.py</span></code>.
+It outputs processed CSV files in the <code class="docutils literal notranslate"><span class="pre">datasets/processed</span></code> directory.</p>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading"></a></h2>
+<p>Possible transformations are implemented in the <a class="reference internal" href="reference.html#module-operations" title="operations"><code class="xref py py-mod docutils literal notranslate"><span class="pre">operations</span></code></a> module. For a description of each operation, please refer to the module’s documentation.</p>
+<p>To process a data set, an ARFF file must be placed in the <code class="docutils literal notranslate"><span class="pre">datasets/raw</span></code> directory. Then, a corresponding configuration must be created in the
+<code class="docutils literal notranslate"><span class="pre">dataset_transformations</span></code> dictionary of the <code class="docutils literal notranslate"><span class="pre">datasets/transformations.py</span></code> file, using the <strong>same name as the ARFF file</strong>.</p>
+<p>The configuration has the following structure. Note that any transformation may be omitted if unnecessary.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dataset_transformations</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="o">...</span>
+  <span class="s1">&#39;dataset-name&#39;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s1">&#39;replace&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;value-to-be-replaced&#39;</span><span class="p">:</span> <span class="s1">&#39;new-value&#39;</span><span class="p">,</span> <span class="s1">&#39;other-value-to-be-replaced&#39;</span><span class="p">:</span> <span class="s1">&#39;other-new-value&#39;</span> <span class="p">},</span>
+    <span class="s1">&#39;zero-index&#39;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
+    <span class="s1">&#39;one-hot-encode&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">],</span>
+    <span class="s1">&#39;drop-columns&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+    <span class="s1">&#39;drop-rows&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">87</span><span class="p">,</span><span class="mi">166</span><span class="p">,</span><span class="mi">192</span><span class="p">,</span><span class="mi">266</span><span class="p">,</span><span class="mi">287</span><span class="p">,</span><span class="mi">302</span><span class="p">],</span>
+    <span class="s1">&#39;drop-rows-with-values&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;?&#39;</span><span class="p">]</span>
+  <span class="p">},</span>
+  <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="basic-usage">
+<h2>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading"></a></h2>
+<p>Process all datasets in the <code class="docutils literal notranslate"><span class="pre">datasets/raw</span></code> directory.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> python3 datasets/pipeline.py all
+</pre></div>
+</div>
+<p>Process a single dataset.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> python3 datasets/pipeline.py acute-inflammations-nephritis
+</pre></div>
+</div>
+<p>Some options are available for debugging, printing and overwriting previously processed data sets. Please refer to the <a class="reference internal" href="reference.html#module-pipeline" title="pipeline"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pipeline</span></code></a> module
+documentation for more information.</p>
+<dl class="footnote brackets">
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Dua, D. and Graff, C. (2019). UCI Machine Learning Repository [<a class="reference external" href="http://archive.ics.uci.edu/ml">http://archive.ics.uci.edu/ml</a>]. Irvine, CA: University of California,
+School of Information and Computer Science.</p>
+</dd>
+<dt class="label" id="id5"><span class="brackets">2</span><span class="fn-backref">(<a href="#id2">1</a>,<a href="#id3">2</a>)</span></dt>
+<dd><p>Bertsimas, Dimitris &amp; Dunn, Jack. (2017). Optimal classification trees. Machine Learning. 106. 10.1007/s10994-017-5633-9.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../reference.html" class="btn btn-neutral float-left" title="Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference.html" class="btn btn-neutral float-right" title="Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Alexandre M. Florio, Pedro Martins, Maximilian Schiffer, Thiago Serra, Thibaut Vidal.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reference &mdash; Optimal Decision Diagrams 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction" href="data/introduction.html" />
+    <link rel="prev" title="Testing" href="testing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Optimal Decision Diagrams
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experiments.html">Experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-config">Config</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-dataset">Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-topology">Topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-solution">Solution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-heuristic">Heuristic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-optimizer">Optimizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-visualizer">Visualizer</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data pipeline</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data/reference.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Optimal Decision Diagrams</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/reference.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="reference">
+<h1>Reference<a class="headerlink" href="#reference" title="Permalink to this heading"></a></h1>
+<section id="module-config">
+<span id="config"></span><h2>Config<a class="headerlink" href="#module-config" title="Permalink to this heading"></a></h2>
+<p>Module defining global configs.</p>
+<p>Mainly used by the Optimizer class, it defines basic solver parameters, such as
+tolerance and time limit.</p>
+<section id="see-also">
+<h3>See also<a class="headerlink" href="#see-also" title="Permalink to this heading"></a></h3>
+<p><a class="reference external" href="https://www.gurobi.com/documentation/9.5/refman/grb_tolerances_and_the_lim.html">Gurobi tolerances and the limitations of double-precision arithmetic</a>.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="config.epsilon">
+<span class="sig-prename descclassname"><span class="pre">config.</span></span><span class="sig-name descname"><span class="pre">epsilon</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0001</span></em><a class="headerlink" href="#config.epsilon" title="Permalink to this definition"></a></dt>
+<dd><p>Strict inequality epsilon used for split decisions (defined in the paper). <em>(float)</em></p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="config.indicator_constraints">
+<span class="sig-prename descclassname"><span class="pre">config.</span></span><span class="sig-name descname"><span class="pre">indicator_constraints</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#config.indicator_constraints" title="Permalink to this definition"></a></dt>
+<dd><p>Flag to implement linear separator constraints as indicator constraints.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="config.solver_feas_tol">
+<span class="sig-prename descclassname"><span class="pre">config.</span></span><span class="sig-name descname"><span class="pre">solver_feas_tol</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1e-07</span></em><a class="headerlink" href="#config.solver_feas_tol" title="Permalink to this definition"></a></dt>
+<dd><p>Gurobi primal feasibility tolerance (Gurobi default: 1e-6). <em>(float)</em></p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="config.solver_int_tol">
+<span class="sig-prename descclassname"><span class="pre">config.</span></span><span class="sig-name descname"><span class="pre">solver_int_tol</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1e-06</span></em><a class="headerlink" href="#config.solver_int_tol" title="Permalink to this definition"></a></dt>
+<dd><p>Gurobi integer feasibility tolerance (Gurobi default: 1e-5). <em>(float)</em></p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="config.solver_opt_tol">
+<span class="sig-prename descclassname"><span class="pre">config.</span></span><span class="sig-name descname"><span class="pre">solver_opt_tol</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1e-07</span></em><a class="headerlink" href="#config.solver_opt_tol" title="Permalink to this definition"></a></dt>
+<dd><p>Gurobi dual feasibility tolerance (Gurobi default: 1e-6). <em>(float)</em></p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="config.time_limit">
+<span class="sig-prename descclassname"><span class="pre">config.</span></span><span class="sig-name descname"><span class="pre">time_limit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">60</span></em><a class="headerlink" href="#config.time_limit" title="Permalink to this definition"></a></dt>
+<dd><p>Solver time limit (in seconds) <em>(int)</em></p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="config.verbose">
+<span class="sig-prename descclassname"><span class="pre">config.</span></span><span class="sig-name descname"><span class="pre">verbose</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#config.verbose" title="Permalink to this definition"></a></dt>
+<dd><p>Flag to enable verbose output.</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-dataset">
+<span id="dataset"></span><h2>Dataset<a class="headerlink" href="#module-dataset" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dataset.Dataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataset.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_validation_test_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataset.Dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Loads a data set file into a format recognizable by other modules.</p>
+<p>Expects the path to a CSV file where each row is a data sample, and each column up to the last
+represents a feature. The last column is expected to be the target class.</p>
+<p>It is responsible for splitting data into training, validation and test sets, and provides attributes for each
+of these structures.</p>
+<p>It can also normalize feature values with sklearn’s MinMaxScaler if <cite>normalize_inputs=True</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>csv_file</strong><span class="classifier">str</span></dt><dd><p>Path to CSV file.</p>
+</dd>
+<dt><strong>train_validation_test_split</strong><span class="classifier">list of float, default [1.0, 0.0, 0.0]</span></dt><dd><p>List with three values representing the ratio of training, validation and test 
+data sets, respectively. The list must have exactly three values between 0.0 and 1.0.
+The split randomization is dependent on the <cite>seed</cite> parameter.</p>
+</dd>
+<dt><strong>normalize_inputs</strong><span class="classifier">bool, default True</span></dt><dd><p>If set to True, normalizes data using sklearn’s MinMaxScaler.</p>
+</dd>
+<dt><strong>seed</strong><span class="classifier">int or None, default None</span></dt><dd><p>Random seed to be used for the train/validation/test split.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool, default False</span></dt><dd><p>Flag to turn on verbose logging.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of samples in the data set.</p>
+</dd>
+<dt><strong>p</strong><span class="classifier">int</span></dt><dd><p>Number of features in the data set.</p>
+</dd>
+<dt><strong>features</strong><span class="classifier">list of int</span></dt><dd><p>List of feature indexes.</p>
+</dd>
+<dt><strong>X</strong><span class="classifier">ndarray</span></dt><dd><p>2D array of samples.</p>
+</dd>
+<dt><strong>Y</strong><span class="classifier">ndarray</span></dt><dd><p>1D array of sample targets.</p>
+</dd>
+<dt><strong>classes</strong><span class="classifier">ndarray</span></dt><dd><p>1D array of data set classes.</p>
+</dd>
+<dt><strong>train_n</strong><span class="classifier">int</span></dt><dd><p>Number of training samples.</p>
+</dd>
+<dt><strong>train_X</strong><span class="classifier">ndarray</span></dt><dd><p>2D array of training samples.</p>
+</dd>
+<dt><strong>train_Y</strong><span class="classifier">ndarray</span></dt><dd><p>1D array of training sample targets.</p>
+</dd>
+<dt><strong>validation_n</strong><span class="classifier">int</span></dt><dd><p>Number of validation samples.</p>
+</dd>
+<dt><strong>validation_X</strong><span class="classifier">ndarray</span></dt><dd><p>2D array of validation samples.</p>
+</dd>
+<dt><strong>validation_Y</strong><span class="classifier">ndarray</span></dt><dd><p>1D array of validation sample targets.</p>
+</dd>
+<dt><strong>test_n</strong><span class="classifier">int</span></dt><dd><p>Number of test samples.</p>
+</dd>
+<dt><strong>test_X</strong><span class="classifier">ndarray</span></dt><dd><p>2D array of test samples.</p>
+</dd>
+<dt><strong>test_Y</strong><span class="classifier">ndarray</span></dt><dd><p>1D array of test sample targets.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-topology">
+<span id="topology"></span><h2>Topology<a class="headerlink" href="#module-topology" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="topology.Topology">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">topology.</span></span><span class="sig-name descname"><span class="pre">Topology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nonterminal_width_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">long_arcs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#topology.Topology" title="Permalink to this definition"></a></dt>
+<dd><p>Collection of structures that define a decision diagram topology.</p>
+<p>Instantiation of this class is intended for internal modules only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>nonterminal_width_list</strong><span class="classifier">list of int</span></dt><dd><p>List defining the number of internal layers and their respective width 
+(i.e. node count). The list must start with a <cite>1</cite>, representing the root.</p>
+</dd>
+<dt><strong>data</strong><span class="classifier">Dataset</span></dt><dd><p>Dataset instance.</p>
+</dd>
+<dt><strong>long_arcs</strong><span class="classifier">bool, default True</span></dt><dd><p>If true, every internal node will be assigned a <em>long arc</em> to all leaves.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool, default False</span></dt><dd><p>Flag to turn on verbose logging.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>layer_widths</strong><span class="classifier">list of int</span></dt><dd><p>Lists layers’ widths, including the terminal layer.</p>
+</dd>
+<dt><strong>long_arcs</strong><span class="classifier">bool</span></dt><dd><p>Indicates if topology has long arcs.</p>
+</dd>
+<dt><strong>root_node</strong><span class="classifier">int</span></dt><dd><p>Index of root node.</p>
+</dd>
+<dt><strong>layers</strong><span class="classifier">int</span></dt><dd><p>Total number of layers in the topology.</p>
+</dd>
+<dt><strong>nodes</strong><span class="classifier">list of int</span></dt><dd><p>List of node indexes.</p>
+</dd>
+<dt><strong>internal_nodes</strong><span class="classifier">list of int</span></dt><dd><p>List of internal node indexes.</p>
+</dd>
+<dt><strong>nodes_per_layer</strong><span class="classifier">dict of int: list of int</span></dt><dd><p>For each layer, lists all of its nodes indexes.</p>
+</dd>
+<dt><strong>layer_of_node</strong><span class="classifier">dict of int: int</span></dt><dd><p>Layer index of each node.</p>
+</dd>
+<dt><strong>has_internal_nodes</strong><span class="classifier">bool</span></dt><dd><p>Indicates whether topology has any internal nodes (other than the root).</p>
+</dd>
+<dt><strong>node_class</strong><span class="classifier">dict of int: int</span></dt><dd><p>Dictionary where the keys are leaf node indexes and the values are each node’s
+respective class index.</p>
+</dd>
+<dt><strong>class_node</strong><span class="classifier">dict of int: int</span></dt><dd><p>Dictionary where the keys are classes and values are each class’s corresponding leaf node.</p>
+</dd>
+<dt><strong>arcs</strong><span class="classifier">list of tuple</span></dt><dd><p>List of possible arcs in the topology. Arcs are tuples <cite>(s,u,v)</cite> where <cite>s</cite> is a side (<cite>+</cite> or <cite>-</cite>),
+<cite>u</cite> is the parent node and <cite>v</cite> is the child node.</p>
+</dd>
+<dt><strong>arcs_departing_node</strong><span class="classifier">dict of int: list of tuple</span></dt><dd><p>For each node, lists all arcs departing it (see <cite>arcs</cite> attribute description).</p>
+</dd>
+<dt><strong>pos_arcs_departing_node</strong><span class="classifier">dict of int: list of tuple</span></dt><dd><p>For each node, lists all positive arcs departing it (see <cite>arcs</cite> attribute description).</p>
+</dd>
+<dt><strong>neg_arcs_departing_node</strong><span class="classifier">dict of int: list of tuple</span></dt><dd><p>For each node, lists all negative arcs departing it (see <cite>arcs</cite> attribute description).</p>
+</dd>
+<dt><strong>arcs_arriving_at_node</strong><span class="classifier">dict of int: list of tuple</span></dt><dd><p>For each node, lists all arcs arriving at it (see <cite>arcs</cite> attribute description).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-solution">
+<span id="solution"></span><h2>Solution<a class="headerlink" href="#module-solution" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="solution.Solution">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">solution.</span></span><span class="sig-name descname"><span class="pre">Solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topology</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#solution.Solution" title="Permalink to this definition"></a></dt>
+<dd><p>Collection of structures that define a built decision diagram.</p>
+<p>Instantiation of this class is intended for internal modules only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">Dataset</span></dt><dd><p>Dataset instance used to build the decision diagram.</p>
+</dd>
+<dt><strong>topology</strong><span class="classifier">Topology</span></dt><dd><p>Topology instance used to build the decision diagram.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>used_nodes</strong><span class="classifier">Set</span></dt><dd><p>Set of nodes used in the solution.</p>
+</dd>
+<dt><strong>node_hyperplane</strong><span class="classifier">dict of int: list of int</span></dt><dd><p>Splitting hyperplane of each used node.
+For univariate splits, the list will have all zeroes, except 
+for the index of the splitting feature.</p>
+</dd>
+<dt><strong>node_intercept</strong><span class="classifier">dict of int: float</span></dt><dd><p>Intercept of the splitting hyperplane of each used node.</p>
+</dd>
+<dt><strong>node_positive_arc</strong><span class="classifier">dict of int: int</span></dt><dd><p>For each node, determines the child node its positive arc points to.</p>
+</dd>
+<dt><strong>node_negative_arc</strong><span class="classifier">dict of int: int</span></dt><dd><p>For each node, determines the child node its negative arc points to.</p>
+</dd>
+<dt><strong>node_class</strong><span class="classifier">dict of int: int</span></dt><dd><p>Class assigned to each leaf node.</p>
+</dd>
+<dt><strong>mip_gap</strong><span class="classifier">float</span></dt><dd><p>Optimality gap found by an Optimizer instance.</p>
+</dd>
+<dt><strong>obj_val</strong><span class="classifier">float</span></dt><dd><p>Objective value found by an Optimizer instance.</p>
+</dd>
+<dt><strong>obj_lb</strong><span class="classifier">float</span></dt><dd><p>Objective lower bound found by an Optimizer instance.</p>
+</dd>
+<dt><strong>bb_nodes</strong><span class="classifier">int</span></dt><dd><p>Number of branch-and-cut nodes explored by an Optimizer instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#solution.Solution.count_class_nodes" title="solution.Solution.count_class_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">count_class_nodes</span></code></a>()</p></td>
+<td><p>Calculates and returns the number of used leaf nodes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#solution.Solution.count_internal_nodes" title="solution.Solution.count_internal_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">count_internal_nodes</span></code></a>()</p></td>
+<td><p>Calculates and returns the number of internal nodes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#solution.Solution.fragmentation_per_node" title="solution.Solution.fragmentation_per_node"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fragmentation_per_node</span></code></a>()</p></td>
+<td><p>Calculates and returns the proportion of training samples that reaches each used node.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#solution.Solution.objective_value" title="solution.Solution.objective_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">objective_value</span></code></a>(alpha, top_internal_nodes)</p></td>
+<td><p>Calculates and returns the objective value.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#solution.Solution.print" title="solution.Solution.print"><code class="xref py py-obj docutils literal notranslate"><span class="pre">print</span></code></a>()</p></td>
+<td><p>Prints a structured description of the decision diagram solution.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#solution.Solution.test_accuracy" title="solution.Solution.test_accuracy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_accuracy</span></code></a>()</p></td>
+<td><p>Calculates and returns the test accuracy.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#solution.Solution.training_accuracy" title="solution.Solution.training_accuracy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">training_accuracy</span></code></a>()</p></td>
+<td><p>Calculates and returns the training accuracy.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#solution.Solution.validation_accuracy" title="solution.Solution.validation_accuracy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validation_accuracy</span></code></a>()</p></td>
+<td><p>Calculates and returns the validation accuracy.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.count_class_nodes">
+<span class="sig-name descname"><span class="pre">count_class_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#solution.Solution.count_class_nodes" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates and returns the number of used leaf nodes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.count_internal_nodes">
+<span class="sig-name descname"><span class="pre">count_internal_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#solution.Solution.count_internal_nodes" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates and returns the number of internal nodes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.fragmentation_per_node">
+<span class="sig-name descname"><span class="pre">fragmentation_per_node</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#solution.Solution.fragmentation_per_node" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates and returns the proportion of training samples that reaches each used node.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.objective_value">
+<span class="sig-name descname"><span class="pre">objective_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_internal_nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#solution.Solution.objective_value" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates and returns the objective value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>alpha</strong><span class="classifier">float</span></dt><dd><p>Alpha hyperparameter for controlling model complexity.</p>
+</dd>
+<dt><strong>top_internal_nodes</strong><span class="classifier">int</span></dt><dd><p>Number of possible internal nodes in the diagram’s topology.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>objective_value</strong><span class="classifier">float</span></dt><dd><p>Objective value for the solution instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#solution.Solution.print" title="Permalink to this definition"></a></dt>
+<dd><p>Prints a structured description of the decision diagram solution.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.test_accuracy">
+<span class="sig-name descname"><span class="pre">test_accuracy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#solution.Solution.test_accuracy" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates and returns the test accuracy.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.training_accuracy">
+<span class="sig-name descname"><span class="pre">training_accuracy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#solution.Solution.training_accuracy" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates and returns the training accuracy.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="solution.Solution.validation_accuracy">
+<span class="sig-name descname"><span class="pre">validation_accuracy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#solution.Solution.validation_accuracy" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates and returns the validation accuracy.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-heuristic">
+<span id="heuristic"></span><h2>Heuristic<a class="headerlink" href="#module-heuristic" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="heuristic.Heuristic">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">heuristic.</span></span><span class="sig-name descname"><span class="pre">Heuristic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topology</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">randomize_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_subset_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#heuristic.Heuristic" title="Permalink to this definition"></a></dt>
+<dd><p>Builds a decision diagram using a top-down constructive heuristic with bottom-up pruning.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">Dataset</span></dt><dd><p>Dataset instance to be used for building the diagram.</p>
+</dd>
+<dt><strong>topology</strong><span class="classifier">Topology</span></dt><dd><p>Topology instance to be used for building the diagram.</p>
+</dd>
+<dt><strong>randomize_splits</strong><span class="classifier">bool, default False</span></dt><dd><p>If True, each split decision will be made using a randomly selected set of features, according
+to <cite>feature_subset_ratio</cite>.</p>
+</dd>
+<dt><strong>feature_subset_ratio</strong><span class="classifier">float, default 0.6</span></dt><dd><p>Ratio of features to be used when <cite>randomize_splits=True</cite>.</p>
+</dd>
+<dt><strong>seed</strong><span class="classifier">int or None, default None</span></dt><dd><p>Random seed to be used when <cite>randomize_splits=True</cite>.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float, default 0.0</span></dt><dd><p>Alpha hyperparameter.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool, default False</span></dt><dd><p>Flag to turn on verbose logging.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>solution</strong><span class="classifier">Solution</span></dt><dd><p>The decision diagram Solution instance generated by the heuristic algorithm.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-optimizer">
+<span id="optimizer"></span><h2>Optimizer<a class="headerlink" href="#module-optimizer" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="optimizer.Optimizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">optimizer.</span></span><span class="sig-name descname"><span class="pre">Optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topology</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_solution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">univariate_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sym_break</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_tree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#optimizer.Optimizer" title="Permalink to this definition"></a></dt>
+<dd><p>Implements the mixed-integer linear programming (MILP) formulation for decision diagrams using Gurobi.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Optimizer configuration can be found in the global <a class="reference internal" href="#module-config" title="config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config</span></code></a> module, including the solver’s 
+time limit, tolerance and verbosity.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">Dataset</span></dt><dd><p>Dataset instance to be used for building the diagram.</p>
+</dd>
+<dt><strong>topology</strong><span class="classifier">Topology</span></dt><dd><p>Topology instance to be used for building the diagram.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float, default 0.0</span></dt><dd><p>Alpha hyperparameter for controlling model complexity. Should be a number between 0.0 and 1.0.</p>
+</dd>
+<dt><strong>initial_solution</strong><span class="classifier">Solution or None, default None</span></dt><dd><p>If not None, provides the model with a cutoff at the initial solution’s objective value (adjusted up by 1%).</p>
+</dd>
+<dt><strong>univariate_split</strong><span class="classifier">bool, default False</span></dt><dd><p>Flag for using univariate or multivariate splits. If True, a single feature is used for each split, resulting in 
+an <em>axis-aligned</em> diagram. If False, multiple features can be used for defining the splitting hyperplane, resulting in
+an <em>oblique</em> diagram.</p>
+</dd>
+<dt><strong>sym_break</strong><span class="classifier">bool, default True</span></dt><dd><p>Flag for using symmetry-breaking constraints. Without any constraint for breaking symmetry, <span class="math notranslate nohighlight">\(2^{|V_I|}\)</span> equivalent
+topologies can be obtained by switching the positive- and negative-side arcs of each internal node and using opposite 
+hyperplanes, where <span class="math notranslate nohighlight">\(V_I\)</span> is the set internal nodes for a diagram. Such symmetry has a dramatic negative impact 
+on branch-and-bound-based MILP solution approaches. If <cite>sym_break</cite> is True, constraints are added to fix the order of arcs 
+between nodes and restrict certain arcs, reducing the number of equivalent topologies.</p>
+</dd>
+<dt><strong>force_tree</strong><span class="classifier">bool, default False</span></dt><dd><p>If True, the formulation design variables are forced to conform to a tree (i.e. merges are disallowed). This parameter can be
+used for constructing <em>optimal decision trees</em>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>solution</strong><span class="classifier">Solution</span></dt><dd><p>The decision diagram Solution instance generated by the MILP formulation.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-visualizer">
+<span id="visualizer"></span><h2>Visualizer<a class="headerlink" href="#module-visualizer" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="visualizer.Visualizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">visualizer.</span></span><span class="sig-name descname"><span class="pre">Visualizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples_per_node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#visualizer.Visualizer" title="Permalink to this definition"></a></dt>
+<dd><p>Graphical representation of decision diagrams.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">Dataset</span></dt><dd><p>Dataset instance used to build the decision diagram.</p>
+</dd>
+<dt><strong>solution</strong><span class="classifier">Solution</span></dt><dd><p>Solution instance to visualize.</p>
+</dd>
+<dt><strong>feature_names</strong><span class="classifier">list of str, default None</span></dt><dd><p>Optional list of feature names. Used to display univariate splits.</p>
+</dd>
+<dt><strong>samples_per_node</strong><span class="classifier">dict of int: list, default None</span></dt><dd><p>Optional dictionary listing samples for each node. If not provided, will be
+calculated from <cite>solution</cite>. Used to display sample count per node.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#visualizer.Visualizer.view" title="visualizer.Visualizer.view"><code class="xref py py-obj docutils literal notranslate"><span class="pre">view</span></code></a>([filled, fragmentation_only])</p></td>
+<td><p>Generate the decision diagram as a Graphviz Digraph.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="visualizer.Visualizer.view">
+<span class="sig-name descname"><span class="pre">view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragmentation_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#visualizer.Visualizer.view" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the decision diagram as a Graphviz Digraph.</p>
+<p>By default, each node displays its index, split decision (<em>note:</em> this currently 
+only works for univariate splits), sample count and class distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filled</strong><span class="classifier">bool, default True</span></dt><dd><p>If <cite>filled</cite> is True, nodes are colored according to its predominant class, else
+nodes have white background.</p>
+</dd>
+<dt><strong>fragmentation_only</strong><span class="classifier">bool, default False</span></dt><dd><p>If <cite>fragmentation_only</cite> is True, each node displays only the proportion of samples
+that reaches it, and is colored by this same metric.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>diagram</dt><dd><p>A Graphviz Digraph representing the decision diagram.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="testing.html" class="btn btn-neutral float-left" title="Testing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="data/introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Alexandre M. Florio, Pedro Martins, Maximilian Schiffer, Thiago Serra, Thibaut Vidal.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
