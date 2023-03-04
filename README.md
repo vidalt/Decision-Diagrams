@@ -10,7 +10,7 @@ This project requires Python3 and the [Gurobi solver](https://www.gurobi.com/), 
 
 ## Documentation
 
-Full documentation is available in `docs/build/html/index.html`, including information about the paper experiments.
+Full documentation is available in [optimal-decision-diagrams.readthedocs.io](https://optimal-decision-diagrams.readthedocs.io/en/latest/), including information about the paper experiments.
 
 ## Getting started
 
