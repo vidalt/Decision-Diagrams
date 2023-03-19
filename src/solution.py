@@ -162,11 +162,12 @@ class Solution:
         for l in range(self.topology.layers-1):
             for v in self.topology.nodes_per_layer[l]:
                 for i in samples_per_node[v]:
+                    if v not in self.node_hyperplane: continue
                     delta = (sum([x*y for x,y in zip(self.node_hyperplane[v],X[i])])
                             - self.node_intercept[v])
-                    if delta >= -cfg.solver_feas_tol:
+                    if delta >= -cfg.solver_feas_tol and v in self.node_positive_arc:
                         samples_per_node[self.node_positive_arc[v]].append(i)
-                    elif delta <= -cfg.epsilon+cfg.solver_feas_tol:
+                    elif delta <= -cfg.epsilon+cfg.solver_feas_tol and v in self.node_negative_arc:
                         samples_per_node[self.node_negative_arc[v]].append(i)
                     else:
                         if training:
@@ -176,9 +177,9 @@ class Solution:
                             print("(look for \"max constraint violation\" Gurobi warning)")
                         else:
                             print("info: (non-training) data point within forbidden epsilon range")
-                        if delta >= -cfg.epsilon/2:
+                        if delta >= -cfg.epsilon/2 and v in self.node_positive_arc:
                             samples_per_node[self.node_positive_arc[v]].append(i)
-                        else:
+                        elif v in self.node_negative_arc:
                             samples_per_node[self.node_negative_arc[v]].append(i)
         return samples_per_node
 

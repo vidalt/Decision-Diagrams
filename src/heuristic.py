@@ -26,6 +26,15 @@ class Heuristic:
         Random seed to be used when `randomize_splits=True`.
     alpha : float, default 0.0
         Alpha hyperparameter.
+    bottom_up_pruning : bool, default True
+        If True, applies bottom-up post-pruning.
+    pure_split_pruning : bool, default True
+        If True, applies pure split pruning during top-down construction (see `purity_threshold`).
+    purity_threshold : float, default 1.0
+        Threshold for pruning splits that result in sample flows consisting mostly of a single class
+        (for example, when the threshold is 1.0, only flows where all samples are of the same class will be pruned).
+    keep_partial_solutions : bool, default False
+        If True, partial diagram solutions will be saved on each split, arc and prune decision.
     verbose : bool, default False
         Flag to turn on verbose logging.
     
@@ -36,15 +45,23 @@ class Heuristic:
     """
 
     def __init__(self, data, topology, randomize_splits=False, 
-                 feature_subset_ratio=0.6, seed=None, alpha=0.0, verbose=False):
+                 feature_subset_ratio=0.6, seed=None, alpha=0.0, bottom_up_pruning=True, 
+                 pure_split_pruning=True, purity_threshold=1.0, keep_partial_solutions=False, verbose=False, logger=None):
         self.rand = random.Random(seed)
         
+        self.logger = logger
+
         self.verbose = verbose
         self.data = data
         self.topology = topology
         self.randomize_splits = randomize_splits
         self.alpha = alpha
+        self.pure_split_pruning = pure_split_pruning
+        self.purity_threshold = purity_threshold
         self.feature_subset_size = math.floor(len(data.features)*feature_subset_ratio)
+        self.keep_partial_solutions = keep_partial_solutions
+        self.partial_solutions = []
+        self.partial_solutions_metadata = []
         
         # The following dictionaries describe the decision diagram constructed in this method
         self.node_samples = { v: set() for v in self.topology.internal_nodes + self.topology.terminal_nodes }
@@ -59,13 +76,13 @@ class Heuristic:
         self.node_samples[topology.root_node] = set([i for i in range(data.train_n)])
 
         self._build_top_down()
-        self._prune_bottom_up()
+        if bottom_up_pruning: self._prune_bottom_up()
 
     def _build_top_down(self):
         """Implements the top-down constructive algorithm"""
         # Fix each terminal node to its corresponding class
-        for v in self.topology.nodes_per_layer[self.topology.layers-1]:
-            index = v - (self.topology.internal_nodes[-1] + 1)
+        for v in self.topology.terminal_nodes:
+            index = v - len(self.topology.nonterminal_nodes)
             self.node_class[v] = self.data.classes[index]
         
         # Layer by layer, we loop over all the non-terminal nodes to decide their branches and where they lead to
@@ -91,7 +108,7 @@ class Heuristic:
                     any_split_ever_found = False
                     best_split_cost, best_split_threshold, best_first_half, best_second_half, best_smallest_partition = [None]*5
                     if self.randomize_splits:
-                        features = self.rand.sample(self.data.features, k=self.feature_subset_size)
+                        features = sorted(self.rand.sample(self.data.features, k=self.feature_subset_size))
                     else:
                         features = self.data.features
                     for f in features:
@@ -120,12 +137,24 @@ class Heuristic:
                     if any_split_ever_found:
                         self.node_feature[v] = best_split_feature
                         self.node_threshold[v] = best_split_threshold
+                        self._persist_partial_solution({
+                            "type": "split",
+                            "attributes": {
+                                "node": v,
+                                "feature": best_split_feature,
+                                "threshold": best_split_threshold
+                            }
+                        })
                 
                 # If no split was found, we prune node v
                 if total_samples_in_node <= 1 or not any_split_ever_found:
                     if self.verbose:
                         print(" No split found, pruning", v)
                     self._prune_node(v, update_solution=False)
+                    self._persist_partial_solution({
+                        "type": "no_split_prune",
+                        "attributes": { "node": v }
+                    })
 
                 if self.verbose and v in self.node_threshold:
                     print(" Split cost:", best_first_half, "+", best_second_half, "=", best_split_cost)
@@ -167,12 +196,13 @@ class Heuristic:
                         merged_node_cost = self._list_weighted_entropy(r1_samples+r2_samples) 
                         merge_cost = merged_node_cost - current_pair_cost
                         if best_merge_cost is None or best_merge_cost > merge_cost:
-                            best_merge_cost = merge_cost
                             if self._is_merge_valid(next_layer_ramifications[r1], next_layer_ramifications[r2]):
                                 found_valid_merge = True
+                                best_merge_cost = merge_cost
                                 best_valid_merge_r1 = r1
                                 best_valid_merge_r2 = r2
                             else:
+                                best_merge_cost = float('inf')
                                 best_invalid_merge_r1 = r1
                                 best_invalid_merge_r2 = r2
                 
@@ -197,15 +227,15 @@ class Heuristic:
             ramification_number = 0
             for (ramification_arcs,samples_per_parent) in next_layer_ramifications:
                 samples = list(chain(*samples_per_parent.values()))
+                predominant_class, predominant_class_share = self._predominant_class(samples)
 
                 is_last_internal_layer = l == self.topology.layers-2
-                samples_have_same_class = len(self._group_samples_in_classes(samples).keys()) == 1
+                is_split_pure = predominant_class_share >= self.purity_threshold
 
                 # If we are in the last internal layer or all samples are of the same class,
                 # we want to assign the ramifications to the terminal node related to the samples' predominant class
-                if is_last_internal_layer or samples_have_same_class:
-                    predominant_class = self._predominant_class(samples)
-                    v = self.topology.internal_nodes[-1] + (list(self.data.classes).index(predominant_class) + 1)
+                if is_last_internal_layer or (self.pure_split_pruning and is_split_pure):
+                    v = self.topology.terminal_nodes[list(self.data.classes).index(predominant_class)]
                 else:
                     v = self.topology.nodes_per_layer[l+1][ramification_number]
                     ramification_number += 1
@@ -227,7 +257,19 @@ class Heuristic:
                     else:
                         self.node_negative_arc[u] = v
 
-        self._generate_solution()
+                    self._persist_partial_solution({
+                        "type": "arc",
+                        "attributes": {
+                            "node_from": u,
+                            "node_to": v,
+                            "side": s,
+                            "pure_split_pruned": (not is_last_internal_layer and self.pure_split_pruning and is_split_pure),
+                            "pure_split_threshold": self.purity_threshold,
+                            "predominant_class": predominant_class,
+                        }
+                    })
+
+        self._persist_solution()
 
     def _prune_bottom_up(self):
         """Implements the bottom-up pruning algorithm"""
@@ -251,29 +293,55 @@ class Heuristic:
                 if pruning_gain >= accuracy_cost:
                     if self.verbose: print("  Should prune")
                     self._prune_node(v)
+                    self._persist_partial_solution({
+                        "type": "bottom_up_prune",
+                        "attributes": {
+                            "node": v,
+                            "accuracy_cost": accuracy_cost,
+                            "pruning_gain": pruning_gain
+                        }
+                    })
                 else:
                     if self.verbose: print("  Should not prune")
+                    self._persist_partial_solution({
+                        "type": "bottom_up_prune_skipped",
+                        "attributes": {
+                            "node": v,
+                            "accuracy_cost": accuracy_cost,
+                            "pruning_gain": pruning_gain
+                        }
+                    })
 
-    def _generate_solution(self):
+    def _persist_solution(self):
         """Sets a new Solution instance to the `solution` attribute"""
-        self.solution = Solution(self.data, self.topology)
-        self.solution.optimal = False
-        self.solution.used_nodes.add(self.topology.root_node)
+        self.solution = self._generate_solution()
+
+    def _persist_partial_solution(self, metadata):
+        if self.keep_partial_solutions:
+            self.partial_solutions.append(self._generate_solution())
+            self.partial_solutions_metadata.append(metadata)
+    
+    def _generate_solution(self):
+        """Creates a new Solution instance based on the current heuristic state"""
+        solution = Solution(self.data, self.topology)
+        solution.optimal = False
+        solution.used_nodes.add(self.topology.root_node)
         for v in self.node_feature:
-            self.solution.node_hyperplane[v] = [1 if f == self.node_feature[v] else 0 for f in self.data.features]
+            solution.node_hyperplane[v] = [1 if f == self.node_feature[v] else 0 for f in self.data.features]
         for v in self.node_threshold:
-            self.solution.node_intercept[v] = self.node_threshold[v]
+            solution.node_intercept[v] = self.node_threshold[v]
         for v in self.node_positive_arc:
             w = self.node_positive_arc[v]
-            self.solution.node_positive_arc[v] = w
-            self.solution.used_nodes.add(w)
+            solution.node_positive_arc[v] = w
+            solution.used_nodes.add(w)
         for v in self.node_negative_arc:
             w = self.node_negative_arc[v]
-            self.solution.node_negative_arc[v] = w
-            self.solution.used_nodes.add(w)
+            solution.node_negative_arc[v] = w
+            solution.used_nodes.add(w)
         for v in self.node_class:
-            self.solution.node_class[v] = self.node_class[v]
-        self.solution.training_misclass = self._total_misclassified_samples()
+            solution.node_class[v] = self.node_class[v]
+        solution.training_misclass = self._total_misclassified_samples(solution)
+        return solution
     
     def _group_samples_in_classes(self, sample_list):
         """Based on the sample given as a list, constructs a dictionary with classes as keys and the sublist of samples belonging to each class"""
@@ -311,7 +379,7 @@ class Heuristic:
             samples_per_class[self.node_class[w]].difference_update(self.node_samples[v])
         for (u,_) in self._parent_arcs(v):
             reassigned_samples = self.node_samples_per_parent[v][u]
-            predominant_class = self._predominant_class(reassigned_samples)
+            predominant_class, _ = self._predominant_class(reassigned_samples)
             if predominant_class in samples_per_class:
                 samples_per_class[predominant_class].update(reassigned_samples)
             else:
@@ -326,16 +394,27 @@ class Heuristic:
                 del self.node_samples_per_parent[w][v]
         for (u,s) in self._parent_arcs(v):
             reassigned_samples = self.node_samples_per_parent[v][u]
-            predominant_class = self._predominant_class(reassigned_samples)
+            predominant_class, _ = self._predominant_class(reassigned_samples)
             w = { value: key for key,value in self.node_class.items() }[predominant_class]
             self._reassign_flow(u, w, s, reassigned_samples)
+
+        positive_arc_child = self.node_positive_arc[v] if v in self.node_positive_arc else None
+        negative_arc_child = self.node_negative_arc[v] if v in self.node_negative_arc else None
             
         if v in self.node_samples: self.node_samples[v] = set()
         if v in self.node_samples_per_parent: self.node_samples_per_parent[v] = {}
         if v in self.node_positive_arc: del self.node_positive_arc[v]
         if v in self.node_negative_arc: del self.node_negative_arc[v]
+
+        positive_arc_child_parents = list(self._parent_arcs(positive_arc_child))
+        negative_arc_child_parents = list(self._parent_arcs(negative_arc_child))
+
+        if len(positive_arc_child_parents) == 0 and positive_arc_child is not None: 
+            self._prune_node(positive_arc_child)
+        if len(negative_arc_child_parents) == 0 and negative_arc_child is not None and positive_arc_child != negative_arc_child:
+            self._prune_node(negative_arc_child)
         
-        if update_solution: self._generate_solution()
+        if update_solution: self._persist_solution()
 
     def _parent_arcs(self, v):
         """Given a node `v`, yields all pairs `(u,s)` of its parent nodes and respective arc sides (+ or -)"""
@@ -358,13 +437,14 @@ class Heuristic:
             self.node_negative_arc[parent] = child
             if self.verbose: print("  Incoming negative arc from", parent, "now points to", child)
     
-    def _assigned_samples_per_class(self):
+    def _assigned_samples_per_class(self, solution=None):
         """Returns a dictionary where keys are data set classes and values are lists of samples assigned to the respective class"""
-        return { c: set(self.node_samples[node]) for node,c in self.node_class.items() if node in self.solution.used_nodes }
+        solution = self.solution if solution is None else solution
+        return { c: set(self.node_samples[node]) for node,c in self.node_class.items() if node in solution.used_nodes }
     
-    def _total_misclassified_samples(self):
+    def _total_misclassified_samples(self, solution=None):
         """Calculates current misclassification"""
-        return self._misclassified_samples(self._assigned_samples_per_class())
+        return self._misclassified_samples(self._assigned_samples_per_class(solution))
 
     def _misclassified_samples(self, samples_per_class):
         """Given a dictionary of samples per class, calculates the number of misclassified samples"""
@@ -372,7 +452,7 @@ class Heuristic:
 
     def _predominant_class(self, samples):
         """Given a list of samples, returns which class most samples belong to"""
-        classes = [self.data.train_Y[x] for x in samples]
+        classes = [self.data.train_Y[i] for i in samples]
         classes_count = reduce(lambda acc, x: { **acc, x: acc[x] + 1 if x in acc else 1 }, classes, {})
         predominant_class = -1
         best_count = -1
@@ -380,7 +460,7 @@ class Heuristic:
             if value > best_count:
                 predominant_class = k
                 best_count = value
-        return predominant_class
+        return predominant_class, best_count / len(samples)
 
     def _is_merge_valid(self, ram_a, ram_b):
         """Given two ramifications, determines if merging them would merge both arcs (+ and -) of some node"""

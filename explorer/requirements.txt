@@ -1,0 +1,2 @@
+dash==2.8.1
+dash_interactive_graphviz==0.3.0

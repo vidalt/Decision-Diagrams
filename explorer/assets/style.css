@@ -1,0 +1,124 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
+
+body {
+  background-color: #1e1e1e;
+  color: #d8d8d8;
+  font-family: "Open Sans";
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1.125em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: #d8d8d8;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+}
+
+#root-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.sidebar {
+  background-color: #1e1e1e;
+  max-width: 400px;
+  padding: 8vh 2vw;
+}
+
+#left-sidebar-container {
+}
+
+#controls-container {
+  margin-top: 1vh;
+}
+
+#controls-container h3 {
+  margin-top: 4vh;
+}
+
+#main-container {
+  background-color: #e8e8e8;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+#steps-container {
+  background-color: #363636;
+  box-sizing: border-box;
+  padding: 30px 10px;
+}
+
+#steps-container button {
+  background-color: rgba(0, 0, 0, 0.125);
+  color: #fff;
+  border-color: rgba(0, 0, 0, 0.1);
+  margin: 0 2px;
+}
+
+#steps-controls-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#right-sidebar-container {
+  align-content: center;
+  background-color: #332e2a;
+  display: flex;
+  flex-direction: column;
+  width: 20vw;
+}
+
+#right-sidebar-container .metric-panel {
+  font-size: 0.75em;
+  margin: 5px 0;
+  padding: 10px 20px;
+  text-align: center;
+}
+
+#right-sidebar-container .metric-panel.first {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+#right-sidebar-container .double {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+#right-sidebar-container .double > div:first-child {
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#right-sidebar-container .metric-panel h2 {
+  font-size: 2em;
+  margin: 0;
+}
+
+#right-sidebar-container .metric-panel span {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+#steps-metadata-container {
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  margin: 3vh 0;
+  padding: 10px;
+  text-align: center;
+}

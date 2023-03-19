@@ -27,6 +27,7 @@ class Visualizer:
         self.feature_names = feature_names
         self.fragmentation_per_node = self.solution.fragmentation_per_node()
         self.samples_per_node = samples_per_node
+        self.colors = self._color_brew(len(data.classes))
         self._calculate_samples_and_class_distribution()
 
     def view(self, filled=True, fragmentation_only=False):
@@ -51,38 +52,59 @@ class Visualizer:
             A Graphviz Digraph representing the decision diagram.
         """
         graph = Digraph()
+        graph.attr(bgcolor='transparent')
         graph.attr('node', shape='box', ordering='out')
         edges = []
-        colors = self._color_brew(len(self.data.classes))
         filled = filled or fragmentation_only
         for l in range(self.topology.layers):
             for v in self.topology.nodes_per_layer[l]:
                 if not v in self.solution.used_nodes:
                     continue
                 if l < self.topology.layers-1:
-                    pos_arc, pos_label, neg_arc, neg_label = self._nonterminal_node_arcs(v)
-                    label = self._nonterminal_node_label(v, fragmentation_only)
-                    color = self._nonterminal_node_color(v, colors.copy(), fragmentation_only) if filled else "#ffffff"
-                    graph.node(str(v), label, style='filled', fillcolor=color)
-                    edges.append([str(v), pos_arc, pos_label])
-                    edges.append([str(v), neg_arc, neg_label])
+                    if v in self.solution.node_positive_arc:
+                        pos_arc, pos_label = self._nonterminal_node_positive_arc(v)
+                        edges.append([str(v), pos_arc, pos_label])
+                    if v in self.solution.node_negative_arc:
+                        neg_arc, neg_label = self._nonterminal_node_negative_arc(v)
+                        edges.append([str(v), neg_arc, neg_label])
+                    content = self._nonterminal_node_content(v, fragmentation_only)
+                    bgcolor = self._nonterminal_node_bgcolor(v, fragmentation_only)
+                    graph.node(str(v), content, style='filled', fillcolor=bgcolor, color='#bbbbbb')
                 elif l == self.topology.layers-1:
-                    class_color = colors[list(self.data.classes).index(int(self.solution.node_class[v]))]
-                    label = self._terminal_node_label(v, fragmentation_only)
+                    class_color = self.colors[list(self.data.classes).index(int(self.solution.node_class[v]))]
+                    content = self._terminal_node_content(v, fragmentation_only)
                     color = self._rgba_to_hex(class_color) if filled else "#ffffff"
                     if fragmentation_only:
                         alpha = int(self.fragmentation_per_node[v] * 125)
                         color = self._rgba_to_hex([0,0,255] + [alpha])
-                    graph.node(str(v), label, style='filled', fillcolor=color, peripheries='2')
+                    graph.node(str(v), content, style='filled', fillcolor=color)
         for edge in edges:
             [node, child_node, label] = edge
-            graph.edge(node, child_node, label, arrowsize='.5')
+            graph.edge(node, child_node, label, arrowsize='.5', color="#bbbbbb")
         return graph
 
-    def _nonterminal_node_color(self, node, colors, fragmentation_only):
+    def _nonterminal_node_bgcolor(self, node, fragmentation_only):
         if fragmentation_only:
-            alpha = int(self.fragmentation_per_node[node] * 125)
-            return self._rgba_to_hex([0,0,255,alpha])
+            return self._fragmentation_node_color(node)
+        return '#f8f8f8'
+
+    def _fragmentation_node_color(self, node):
+        alpha = int(self.fragmentation_per_node[node] * 125)
+        return self._rgba_to_hex([0,0,255,alpha])
+
+    def _nonterminal_node_content(self, node, fragmentation_only):
+        if fragmentation_only:
+            return self._fragmentation_label(node)
+        color = self._nonterminal_node_color(node, self.colors.copy())
+        return f"""<
+            <table border="0">
+                <tr><td colspan="3" bgcolor="{color}"></td></tr>
+                <tr><td colspan="1" bgcolor="{color}">{node}</td><td colspan="2">{self._split_label(node)}</td></tr>
+                <tr><td colspan="1">{len(self.samples_per_node[node])}</td><td colspan="2">{str(self.class_distrib_per_node[node])}</td></tr>
+            </table>
+        >"""
+
+    def _nonterminal_node_color(self, node, colors):
         class_distrib = self.class_distrib_per_node[node]
         argmax = np.argwhere(class_distrib == np.amax(class_distrib)).flatten()
         if len(argmax) > 1:
@@ -95,36 +117,35 @@ class Visualizer:
         alpha = int(0.5 * 255 * (max_sample_count / sample_count_sum))
         return self._rgba_to_hex(class_color[:3] + [alpha])
 
-    def _nonterminal_node_label(self, node, fragmentation_only):
-        if fragmentation_only:
-            return self._fragmentation_label(node)
-        split = self._split_label(node)
-        samples = 'samples {}'.format(len(self.samples_per_node[node]))
-        classif = str(self.class_distrib_per_node[node])
-        return '{}\n{}\n{}\n{}'.format(node, split, samples, classif)
-
     def _split_label(self, node):
+        if node not in self.solution.node_hyperplane:
+            return '--'
         feature_index = np.argmax(self.solution.node_hyperplane[node])
         if self.feature_names is None:
-            feature = 'X[{}]'.format(feature_index)
+            feature = '<FONT POINT-SIZE="10">X<sub>{}</sub></FONT> '.format(feature_index)
         else:
             feature = self.feature_names[feature_index]
-        return '{} >= {:0.1f}'.format(feature, self.solution.node_intercept[node])
+        return '{} ≥ {:0.1f}'.format(feature, self.solution.node_intercept[node])
 
-    def _nonterminal_node_arcs(self, node):
+    def _nonterminal_node_positive_arc(self, node):
         pos_arc = self.solution.node_positive_arc[node]
-        neg_arc = self.solution.node_negative_arc[node]
         pos_label = 'True' if node == self.topology.root_node else None
+        return str(pos_arc), pos_label
+
+    def _nonterminal_node_negative_arc(self, node):
+        neg_arc = self.solution.node_negative_arc[node]
         neg_label = 'False' if node == self.topology.root_node else None
-        return str(pos_arc), pos_label, str(neg_arc), neg_label
+        return str(neg_arc), neg_label
     
-    def _terminal_node_label(self, node, fragmentation_only):
+    def _terminal_node_content(self, node, fragmentation_only):
         if fragmentation_only:
             return self._fragmentation_label(node)
-        leaf_class = 'class {}'.format(str(self.solution.node_class[node]))
-        samples = 'samples {}'.format(len(self.samples_per_node[node]))
-        classif = str(self.class_distrib_per_node[node])
-        return '{}\n{}\n{}\n{}'.format(node, leaf_class, samples, classif)
+        return f"""<
+            <table border="0">
+                <tr><td colspan="1" bgcolor="#00000033">{node}</td><td colspan="2">{f'class {str(self.solution.node_class[node])}'}</td></tr>
+                <tr><td colspan="1">{len(self.samples_per_node[node])}</td><td colspan="2">{str(self.class_distrib_per_node[node])}</td></tr>
+            </table>
+        >"""
 
     def _fragmentation_label(self, node):
         return "{:0.1f}%".format(self.fragmentation_per_node[node]*100)
@@ -152,11 +173,15 @@ class Visualizer:
                     
             for l in range(self.topology.layers-1):
                 for v in self.topology.nodes_per_layer[l]:
+                    if v not in self.solution.used_nodes: continue
                     for i in self.samples_per_node[v]:
+                        if v not in self.solution.node_hyperplane: continue
                         lhs  = sum([x*y for x,y in zip(self.solution.node_hyperplane[v],self.data.train_X[i])])
                         if lhs >= self.solution.node_intercept[v]:
+                            if v not in self.solution.node_positive_arc: continue
                             u = self.solution.node_positive_arc[v]
                         else:
+                            if v not in self.solution.node_negative_arc: continue
                             u = self.solution.node_negative_arc[v]
                         self.samples_per_node[u].append(i)
                         self.class_distrib_per_node[u][list(classes).index(int(Y[i]))] += 1
